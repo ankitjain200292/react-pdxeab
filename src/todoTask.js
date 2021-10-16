@@ -5,12 +5,20 @@ class TodoTask extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tmpSub: '',
+      currentSub: '',
       subjects: [
+        {
+          name: 'test',
+          time: 0,
+          state: true,
+        },
       ],
     };
+
     this.inputRef = React.createRef();
     this.addTodo = this.addTodo.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
+    this.resumeTimer = this.resumeTimer.bind(this);
   }
 
   addTodo() {
@@ -25,31 +33,53 @@ class TodoTask extends React.Component {
         state: true,
       }),
     });
+
+    this.setState({ currentSub: this.inputRef.current.value });
   }
 
   stopTimer(name) {
-    
-    const subjects = this.state.subjects;
-    // function to change the state of current subject to false
+    console.log(name);
+    this.setState({
+      subjects: this.state.subjects.map((subject) => {
+        if (subject.name == name) {
+          subject.state = false;
+        }
+        return subject;
+      }),
+    });
   }
 
-  ResumeTimer(name) {
-    // function to change the state of other subject to false and current top true
-  }
-
-  updateTiming(name) {
-    // function for chaning the value of timer 
+  resumeTimer(name) {
+    this.setState({
+      subjects: this.state.subjects.map((subject) => {
+        if (subject.name == name) {
+          subject.state = true;
+        } else {
+          subject.state = false;
+        }
+        return subject;
+      }),
+    });
   }
 
   render() {
     return (
       <div>
+        {this.state.currentSub}
         {this.state.subjects.map((subject) => {
           return (
             <div>
               {subject.name}
               <SubjectTimer timerState={subject.state} stopTimer = {}/>
-              {subject.state ? <button onClick={this.stopTimer(subject.name)} > Stop </button> : <button onClick={this.stopTimer(subject.name)}> Resume </button> }
+              {subject.state ? (
+                <button onClick={() => this.stopTimer(subject.name)}>
+                  Stop
+                </button>
+              ) : (
+                <button onClick={() => this.resumeTimer(subject.name)}>
+                  Resume
+                </button>
+              )}
             </div>
           );
         })}
@@ -61,6 +91,5 @@ class TodoTask extends React.Component {
 }
 
 export default TodoTask;
-
 
 //
