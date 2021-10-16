@@ -17,7 +17,11 @@ const SubjectTimer = (props) => {
     return () => {
       clearInterval(timer);
     };
-  }, [subjecttiming, props.timerState]);
+  }, [subjecttiming, timerState]);
+
+  useEffect(() => {
+    setTimerState(props.timerState);
+  }, [props.timerState]);
 
   return <div> {subjecttiming} </div>;
 };
